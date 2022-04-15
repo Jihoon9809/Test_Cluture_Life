@@ -1,0 +1,86 @@
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String country='';
+  String locality='';
+  String postalCode='';
+
+  getLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);;
+    print("//////////////////////////////////");
+    print(position.latitude);
+    print(position.longitude);
+    print("//////////////////////////////////");
+    print(placemarks.toString());
+    setState(() {
+      //country = placemarks[0].country == null? "": placemarks[0].country!;
+      //locality = placemarks[0].locality == null? "": placemarks[0].locality!;
+      //postalCode = placemarks[0].postalCode == null? "": placemarks[0].postalCode!;
+     // print(placemarks[0].toString());
+
+    });
+
+  }
+
+  @override
+  void initState(){
+    getLocation();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Geocoding'),
+        centerTitle: true,
+      ),
+      /*body: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add_location),
+              Text('$locality, $country - $postalCode')
+            ],
+          )
+      )*/// This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
